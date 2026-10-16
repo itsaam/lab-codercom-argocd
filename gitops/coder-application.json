@@ -1,0 +1,32 @@
+{
+  "apiVersion": "argoproj.io/v1alpha1",
+  "kind": "Application",
+  "metadata": {
+    "name": "coder",
+    "namespace": "argocd"
+  },
+  "spec": {
+    "project": "default",
+    "source": {
+      "repoURL": "https://github.com/itsaam/lab-suez-codercom-argocd-azuredevops.git",
+      "targetRevision": "main",
+      "path": "charts/coder",
+      "helm": {
+        "releaseName": "coder",
+        "valueFiles": [
+          "../../gitops/coder-values.json"
+        ]
+      }
+    },
+    "destination": {
+      "server": "https://kubernetes.default.svc",
+      "namespace": "coder"
+    },
+    "syncPolicy": {
+      "automated": {
+        "prune": true,
+        "selfHeal": true
+      }
+    }
+  }
+}

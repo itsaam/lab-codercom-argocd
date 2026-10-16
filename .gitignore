@@ -1,0 +1,12 @@
+private/
+.env
+.env.*
+!.env.example
+*kubeconfig*
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.log
+charts/*/charts/
+__pycache__/

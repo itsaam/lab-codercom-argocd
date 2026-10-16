@@ -1,0 +1,42 @@
+{
+  "coder": {
+    "image": {
+      "tag": "v2.26.0"
+    },
+    "serviceAccount": {
+      "name": "coder",
+      "workspacePerms": false
+    },
+    "resources": {
+      "requests": {
+        "cpu": "100m",
+        "memory": "256Mi"
+      },
+      "limits": {
+        "memory": "1Gi"
+      }
+    },
+    "env": [
+      {
+        "name": "CODER_PG_CONNECTION_URL",
+        "valueFrom": {
+          "secretKeyRef": {
+            "name": "postgres-auth",
+            "key": "url"
+          }
+        }
+      },
+      {
+        "name": "CODER_ACCESS_URL",
+        "value": "http://coder.coder.svc.cluster.local"
+      },
+      {
+        "name": "CODER_TELEMETRY_ENABLE",
+        "value": "false"
+      }
+    ],
+    "service": {
+      "type": "ClusterIP"
+    }
+  }
+}
