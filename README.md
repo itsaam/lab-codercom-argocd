@@ -63,7 +63,7 @@ Le lab exécuté utilisait un petit dépôt Git interne contenant le chart. L'Ap
 |---|---|
 | [gitops/coder-application.json](gitops/coder-application.json) | Application Argo CD ciblant ce dépôt et la branche main |
 | [gitops/coder-values.json](gitops/coder-values.json) | Paramètres Helm Coder, sans secret ni proxy OpenAI |
-| [charts/UPSTREAM.md](charts/UPSTREAM.md) | Provenance et version des charts officiels copiés sans modification |
+| [charts/UPSTREAM.md](charts/UPSTREAM.md) | Provenance et version des charts officiels et adaptation locale documentée |
 | [kubernetes/postgres.yaml](kubernetes/postgres.yaml) | PostgreSQL de démonstration : StatefulSet, Service et disque de 2 Gio |
 | [kubernetes/workspace-rbac.json](kubernetes/workspace-rbac.json) | Permissions de Coder dans le namespace workspaces |
 | [templates/git-go/main.tf](templates/git-go/main.tf) | Template de workspace Git/Go avec volume conservé au stop/start |
@@ -90,6 +90,10 @@ Un serveur Linux avec 12 Gio de RAM est une base raisonnable pour un workspace s
 
 Base de l'essai : Kubernetes 1.32.2, Argo CD 3.1.9, Helm 3.18.4, Coder 2.26.0, PostgreSQL 16.8, Go 1.24.2. Providers Terraform verrouillés : coder/coder 2.5.0 et hashicorp/kubernetes 2.36.0.
 
-Ces versions fixent le prototype testé, sans prétendre être les dernières ou être validées pour la production. Les charts sont ceux du tag officiel `v2.26.0` ; leur version source est `0.1.0` et l'image Coder est explicitement fixée. Le workspace utilise l'image Go officielle avec UID 1000 ; une future image dédiée pourra créer un véritable utilisateur Linux `coder`.
+Ces versions fixent le prototype testé, sans prétendre être les dernières ou être validées pour la production. Les charts proviennent du tag officiel `v2.26.0` ; leur version source est `0.1.0` et l'image Coder est explicitement fixée. Le workspace utilise l'image Go officielle avec UID 1000 ; une future image dédiée pourra créer un véritable utilisateur Linux `coder`.
 
 Le cœur open source de Coder est sous AGPL v3. Les charts upstream et leur licence sont conservés dans `charts/`. Les fonctionnalités Enterprise ont des conditions distinctes. Voir les [licences officielles Coder](https://github.com/coder/coder).
+
+### Correction du démarrage sur la VM personnelle
+
+Une sonde startupProbe laisse jusqu’à cinq minutes à Coder pour démarrer, sans désactiver les sondes readiness/liveness. Le chart vendored comporte une petite adaptation documentée dans charts/UPSTREAM.md pour rendre ce paramètre. Le test dans la VM a abouti : pod 1/1, /healthz HTTP 200 et rollout réussi.

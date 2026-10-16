@@ -37,6 +37,15 @@
     ],
     "service": {
       "type": "ClusterIP"
+    },
+    "startupProbe": {
+      "httpGet": {
+        "path": "/healthz",
+        "port": "http"
+      },
+      "periodSeconds": 5,
+      "timeoutSeconds": 3,
+      "failureThreshold": 60
     }
   }
 }

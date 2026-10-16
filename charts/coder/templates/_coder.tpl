@@ -97,6 +97,10 @@ ports:
   {{- end }}
   {{- end }}
   {{- end }}
+{{- with .Values.coder.startupProbe }}
+startupProbe:
+  {{- toYaml . | nindent 2 }}
+{{- end }}
 readinessProbe:
   httpGet:
     path: /healthz
